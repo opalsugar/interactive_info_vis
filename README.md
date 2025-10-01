@@ -1,2 +1,2 @@
 # interactive_info_vis
-Visualization template for class!
+Visualization template for INFO474!
