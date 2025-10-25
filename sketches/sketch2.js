@@ -1,14 +1,17 @@
 // Instance-mode sketch for tab 2
-registerSketch('sk2', function (p) {
+registerSketch("sk2", function (p) {
   p.setup = function () {
-    p.createCanvas(p.windowWidth, p.windowHeight);
-  };
-  p.draw = function () {
+    p.createCanvas(800, 800);
     p.background(220);
-    p.fill(100, 150, 240);
-    p.textSize(32);
-    p.textAlign(p.CENTER, p.CENTER);
-    p.text('HWK #4. A', p.width / 2, p.height / 2);
   };
-  p.windowResized = function () { p.resizeCanvas(p.windowWidth, p.windowHeight); };
+
+  p.draw = function () {
+    p.rect(20, 50, 100, 30);
+    p.rect(20, 100, 100, 30);
+    p.rect(20, 150, 100, 30);
+  };
+
+  p.windowResized = function () {
+    p.resizeCanvas(p.windowWidth, p.windowHeight);
+  };
 });
