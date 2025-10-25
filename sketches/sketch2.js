@@ -4,6 +4,7 @@ registerSketch("sk2", function (p) {
   let currentTaskIndex = 0;
   let tasks = [];
   let timerStarted = false;
+  let nameInput, timeInput, addBtn, startBtn, nextTaskBtn;
 
   p.setup = function () {
     p.createCanvas(800, 800);
@@ -25,6 +26,10 @@ registerSketch("sk2", function (p) {
     startBtn = p.createButton("Start");
     startBtn.size(100, 30);
     startBtn.position(10, 255);
+
+    nextTaskBtn = p.createButton("Next Task");
+    nextTaskBtn.size(100, 30);
+    nextTaskBtn.position(10, 305);
 
     addBtn.mousePressed(() => {
       let taskName = nameInput.value();
@@ -61,6 +66,11 @@ registerSketch("sk2", function (p) {
       startTime = p.millis();
       timerStarted = true;
     });
+
+    nextTaskBtn.mousePressed(() => {
+      currentTaskIndex++;
+      startTime = p.millis();
+    });
   };
 
   p.clock = function () {
@@ -87,55 +97,42 @@ registerSketch("sk2", function (p) {
     p.stroke(0);
 
     // full rectangle
-    p.rect(170, 10, 300, 720);
+    p.textAlign(p.LEFT, p.BASELINE);
+    p.rect(170, 30, 300, 720);
+    p.text("Intended Plan", 270, 20);
+    p.text("Actual Plan", 590, 20);
 
     // rectangles for each time interval, intended plan
-    p.text("6am", 130, 20);
-    p.rect(170, 10, 300, 90);
-    p.rect(170, 100, 300, 90);
+    p.text("6am", 130, 40);
+    p.rect(170, 30, 300, 90);
+    p.rect(170, 120, 300, 90);
 
-    p.text("7am", 130, 195);
-    p.rect(170, 190, 300, 90);
-    p.rect(170, 280, 300, 90);
+    p.text("7am", 130, 215);
+    p.rect(170, 210, 300, 90);
+    p.rect(170, 300, 300, 90);
 
-    p.text("8am", 130, 375);
-    p.rect(170, 370, 300, 90);
-    p.rect(170, 460, 300, 90);
+    p.text("8am", 130, 395);
+    p.rect(170, 390, 300, 90);
+    p.rect(170, 480, 300, 90);
 
-    p.text("9am", 130, 555);
-    p.rect(170, 550, 300, 90);
+    p.text("9am", 130, 575);
+    p.rect(170, 570, 300, 90);
 
     // actual plan rectangles
-    p.rect(470, 10, 300, 720);
-    p.rect(470, 10, 300, 90);
-    p.rect(470, 100, 300, 90);
-    p.rect(470, 190, 300, 90);
-    p.rect(470, 280, 300, 90);
-    p.rect(470, 370, 300, 90);
-    p.rect(470, 460, 300, 90);
-    p.rect(470, 550, 300, 90);
+    p.rect(470, 30, 300, 720);
+    p.rect(470, 30, 300, 90);
+    p.rect(470, 120, 300, 90);
+    p.rect(470, 210, 300, 90);
+    p.rect(470, 300, 300, 90);
+    p.rect(470, 390, 300, 90);
+    p.rect(470, 480, 300, 90);
+    p.rect(470, 570, 300, 90);
 
     // rects for tasks
     // 240 mins, each min is 3 pixels, 30 mins is 90 pixels
-    let y = 10;
-    tasks.forEach((task) => {
-      p.stroke(task.color);
-      p.strokeWeight(4);
-      p.rect(170, y, 300, task.time * 3);
-      p.strokeWeight(1);
-      p.fill(task.color);
-      p.textAlign(p.CENTER, p.CENTER);
-      p.text(
-        task.task + " - " + task.time + " mins",
-        320,
-        y + (task.time * 3) / 2
-      );
-      p.noFill();
-      y += task.time * 3;
-      p.noStroke();
-    });
-
-    y = 10;
+    // filling in incrementally
+    let y = 30;
+    p.noStroke();
     tasks.forEach((task, idx) => {
       if (timerStarted) {
         if (idx === currentTaskIndex) {
@@ -149,6 +146,26 @@ registerSketch("sk2", function (p) {
         y += task.time * 3;
         p.noFill();
       }
+    });
+
+    // border
+    y = 30;
+    tasks.forEach((task) => {
+      p.stroke(task.color);
+      p.strokeWeight(4);
+      p.rect(170, y, 300, task.time * 3);
+      p.noStroke();
+      p.strokeWeight(1);
+      p.fill("black");
+      p.textAlign(p.CENTER, p.CENTER);
+      p.text(
+        task.task + " - " + task.time + " mins",
+        320,
+        y + (task.time * 3) / 2
+      );
+      p.noFill();
+      y += task.time * 3;
+      p.noStroke();
     });
 
     if (timerStarted && currentTime >= tasks[currentTaskIndex].time * 3) {
