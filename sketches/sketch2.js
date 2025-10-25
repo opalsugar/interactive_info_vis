@@ -1,6 +1,7 @@
 // Instance-mode sketch for tab 2
 registerSketch("sk2", function (p) {
   let startTime;
+  let currentTaskIndex = 0;
   let tasks = [
     { task: "Wake Up", time: 30, color: "red" },
     { task: "Shower", time: 15, color: "blue" },
@@ -8,8 +9,8 @@ registerSketch("sk2", function (p) {
   ];
 
   p.setup = function () {
-    p.createCanvas(800, 800);
     startTime = p.millis();
+    p.createCanvas(800, 800);
   };
 
   p.clock = function () {
@@ -42,19 +43,19 @@ registerSketch("sk2", function (p) {
     p.rect(170, 10, 300, 720);
 
     // rectangles for each time interval, intended plan
-    p.text("6am", 140, 20);
+    p.text("6am", 130, 20);
     p.rect(170, 10, 300, 90);
     p.rect(170, 100, 300, 90);
 
-    p.text("7am", 140, 195);
+    p.text("7am", 130, 195);
     p.rect(170, 190, 300, 90);
     p.rect(170, 280, 300, 90);
 
-    p.text("8am", 140, 375);
+    p.text("8am", 130, 375);
     p.rect(170, 370, 300, 90);
     p.rect(170, 460, 300, 90);
 
-    p.text("9am", 140, 555);
+    p.text("9am", 130, 555);
     p.rect(170, 550, 300, 90);
 
     // actual plan rectangles
@@ -74,12 +75,29 @@ registerSketch("sk2", function (p) {
       p.stroke(task.color);
       p.strokeWeight(4);
       p.rect(170, y, 300, task.time * 3);
+      y += task.time * 3;
+      p.noStroke();
+    });
 
-      p.fill(task.color);
-      p.rect(170, y, 300, currentTime);
+    y = 10;
+    tasks.forEach((task, idx) => {
+      if (idx === currentTaskIndex) {
+        console.log("idx", idx);
+        let filledHeight = p.constrain(currentTime, 0, task.time * 3);
+        p.fill(task.color);
+        p.rect(170, y, 300, filledHeight);
+      } else if (idx < currentTaskIndex) {
+        p.fill(task.color);
+        p.rect(170, y, 300, task.time * 3);
+      }
       y += task.time * 3;
       p.noFill();
     });
+
+    if (currentTime >= tasks[currentTaskIndex].time * 3) {
+      currentTaskIndex++;
+      startTime = p.millis();
+    }
   };
 
   p.windowResized = function () {
