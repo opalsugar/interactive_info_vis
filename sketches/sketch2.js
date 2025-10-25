@@ -1,5 +1,6 @@
 // Instance-mode sketch for tab 2
 registerSketch("sk2", function (p) {
+  let startTime;
   let tasks = [
     { task: "Wake Up", time: 30, color: "red" },
     { task: "Shower", time: 15, color: "blue" },
@@ -8,10 +9,27 @@ registerSketch("sk2", function (p) {
 
   p.setup = function () {
     p.createCanvas(800, 800);
-    p.background(220);
+    startTime = p.millis();
+  };
+
+  p.clock = function () {
+    let h = p.hour();
+    let m = p.minute();
+    let s = p.second();
   };
 
   p.draw = function () {
+    p.background(220);
+
+    // time setup
+    let currentTime = p.floor((p.millis() - startTime) / 1000);
+    console.log(currentTime);
+
+    p.fill(0);
+    p.noStroke();
+    p.textSize(16);
+    p.text(currentTime, 20, 30);
+
     // input boxes
     p.noFill();
     p.strokeWeight(1);
@@ -56,14 +74,12 @@ registerSketch("sk2", function (p) {
       p.stroke(task.color);
       p.strokeWeight(4);
       p.rect(170, y, 300, task.time * 3);
-      y += task.time * 3;
-    });
-  };
 
-  p.clock = function () {
-    let h = p.hour();
-    let m = p.minute();
-    let s = p.second();
+      p.fill(task.color);
+      p.rect(170, y, 300, currentTime);
+      y += task.time * 3;
+      p.noFill();
+    });
   };
 
   p.windowResized = function () {

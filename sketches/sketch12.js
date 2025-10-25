@@ -1,7 +1,6 @@
 // Example 8
 
-registerSketch('sk12', function (p) {
-  
+registerSketch("sk12", function (p) {
   // Config
   const WORK_MIN = 25;
   const SHORT_MIN = 5;
@@ -9,7 +8,7 @@ registerSketch('sk12', function (p) {
   const LONG_EVERY = 4;
 
   // State
-  let phase = 'work';
+  let phase = "work";
   let running = false;
   let startMs = 0;
   let elapsedMs = 0;
@@ -20,18 +19,18 @@ registerSketch('sk12', function (p) {
   p.setup = function () {
     p.createCanvas(650, 700);
     p.angleMode(p.DEGREES);
-    p.textFont('Georgia');
+    p.textFont("Georgia");
 
-    buttons.push(makeBtn('Start', 0, 0, toggleRun));
-    buttons.push(makeBtn('Reset', 0, 0, resetPhase));
-    buttons.push(makeBtn('Skip', 0, 0, skipPhase));
+    buttons.push(makeBtn("Start", 0, 0, toggleRun));
+    buttons.push(makeBtn("Reset", 0, 0, resetPhase));
+    buttons.push(makeBtn("Skip", 0, 0, skipPhase));
   };
 
   p.draw = function () {
     // Background gradient
     for (let y = 0; y < p.height; y++) {
       const inter = p.map(y, 0, p.height, 0, 1);
-      const c = p.lerpColor(p.color('#f9e6f0'), p.color('#f3f0fa'), inter);
+      const c = p.lerpColor(p.color("#f9e6f0"), p.color("#f3f0fa"), inter);
       p.stroke(c);
       p.line(0, y, p.width, y);
     }
@@ -94,7 +93,13 @@ registerSketch('sk12', function (p) {
     p.textSize(13);
     p.fill(110, 80, 120);
     p.textAlign(p.CENTER, p.TOP);
-    p.text(`Pomodoros: ${totalWorks}   •   Cycle: ${completedWorks % LONG_EVERY}/${LONG_EVERY}`, cx, cy + 18);
+    p.text(
+      `Pomodoros: ${totalWorks}   •   Cycle: ${
+        completedWorks % LONG_EVERY
+      }/${LONG_EVERY}`,
+      cx,
+      cy + 18
+    );
 
     // Buttons
     layoutButtons(cx, cy + R + 32);
@@ -104,61 +109,66 @@ registerSketch('sk12', function (p) {
     p.fill(130, 100, 140);
     p.textSize(11);
     p.textAlign(p.CENTER, p.TOP);
-    p.text('Space: Start/Pause   •   R: Reset   •   N: Skip', cx, p.height - 26);
+    p.text(
+      "Space: Start/Pause   •   R: Reset   •   N: Skip",
+      cx,
+      p.height - 26
+    );
   };
 
   // Logic
   function toggleRun() {
     running = !running;
-    labelButton('Start', running ? 'Pause' : 'Start');
+    labelButton("Start", running ? "Pause" : "Start");
     if (running) startMs = p.millis();
     else elapsedMs = getElapsedMs();
   }
 
   function resetPhase() {
     running = false;
-    labelButton('Start', 'Start');
+    labelButton("Start", "Start");
     startMs = p.millis();
     elapsedMs = 0;
   }
 
   function skipPhase() {
     running = false;
-    labelButton('Start', 'Start');
+    labelButton("Start", "Start");
     onPhaseComplete(true);
   }
 
   function onPhaseComplete(skipped = false) {
-    if (phase === 'work' && !skipped) {
+    if (phase === "work" && !skipped) {
       completedWorks++;
       totalWorks++;
     }
 
-    if (phase === 'work') {
-      if (completedWorks > 0 && completedWorks % LONG_EVERY === 0) phase = 'long';
-      else phase = 'short';
-    } else phase = 'work';
+    if (phase === "work") {
+      if (completedWorks > 0 && completedWorks % LONG_EVERY === 0)
+        phase = "long";
+      else phase = "short";
+    } else phase = "work";
 
     elapsedMs = 0;
     startMs = p.millis();
     running = true;
-    labelButton('Start', 'Pause');
+    labelButton("Start", "Pause");
   }
 
   function currentPhaseMinutes() {
-    if (phase === 'work') return WORK_MIN;
-    if (phase === 'short') return SHORT_MIN;
+    if (phase === "work") return WORK_MIN;
+    if (phase === "short") return SHORT_MIN;
     return LONG_MIN;
   }
 
   function phaseTitle() {
-    if (phase === 'work') return 'Focus Time 🌸';
-    if (phase === 'short') return 'Short Break ☕';
-    return 'Long Break 💗';
+    if (phase === "work") return "Focus Time 🌸";
+    if (phase === "short") return "Short Break ☕";
+    return "Long Break 💗";
   }
 
   function getElapsedMs() {
-    return running ? (p.millis() - startMs) + elapsedMs : elapsedMs;
+    return running ? p.millis() - startMs + elapsedMs : elapsedMs;
   }
 
   function minutesToMs(mins) {
@@ -173,9 +183,9 @@ registerSketch('sk12', function (p) {
   }
 
   function phaseColor(phase) {
-    if (phase === 'work') return p.color('#F6A5C0'); // rose
-    if (phase === 'short') return p.color('#B5EAD7'); // mint
-    return p.color('#C7CEEA'); // lavender
+    if (phase === "work") return p.color("#F6A5C0"); // rose
+    if (phase === "short") return p.color("#B5EAD7"); // mint
+    return p.color("#C7CEEA"); // lavender
   }
 
   // Buttons
@@ -184,7 +194,12 @@ registerSketch('sk12', function (p) {
   }
 
   function labelButton(oldText, newText) {
-    const b = buttons.find(btn => btn.label === oldText || (oldText === 'Start' && (btn.label === 'Start' || btn.label === 'Pause')));
+    const b = buttons.find(
+      (btn) =>
+        btn.label === oldText ||
+        (oldText === "Start" &&
+          (btn.label === "Start" || btn.label === "Pause"))
+    );
     if (b) b.label = newText;
   }
 
@@ -203,15 +218,18 @@ registerSketch('sk12', function (p) {
     p.textAlign(p.CENTER, p.CENTER);
     p.textSize(14);
     for (let b of buttons) {
-      b.hover = p.mouseX >= b.x && p.mouseX <= b.x + b.w &&
-                p.mouseY >= b.y && p.mouseY <= b.y + b.h;
+      b.hover =
+        p.mouseX >= b.x &&
+        p.mouseX <= b.x + b.w &&
+        p.mouseY >= b.y &&
+        p.mouseY <= b.y + b.h;
 
       p.stroke(255, 150);
       p.strokeWeight(1);
-      p.fill(b.hover ? '#f6d7eb' : '#f9e6f0');
+      p.fill(b.hover ? "#f6d7eb" : "#f9e6f0");
       p.rect(b.x, b.y, b.w, b.h, 20);
 
-      if (b.label === 'Start' || b.label === 'Pause') p.fill(phaseColor(phase));
+      if (b.label === "Start" || b.label === "Pause") p.fill(phaseColor(phase));
       else p.fill(120, 90, 120);
 
       p.noStroke();
@@ -221,8 +239,12 @@ registerSketch('sk12', function (p) {
 
   p.mousePressed = function () {
     for (let b of buttons) {
-      if (p.mouseX >= b.x && p.mouseX <= b.x + b.w &&
-          p.mouseY >= b.y && p.mouseY <= b.y + b.h) {
+      if (
+        p.mouseX >= b.x &&
+        p.mouseX <= b.x + b.w &&
+        p.mouseY >= b.y &&
+        p.mouseY <= b.y + b.h
+      ) {
         b.onClick();
         return;
       }
@@ -230,11 +252,12 @@ registerSketch('sk12', function (p) {
   };
 
   p.keyPressed = function () {
-    if (p.key === ' ') toggleRun();
-    if (p.key === 'r' || p.key === 'R') resetPhase();
-    if (p.key === 'n' || p.key === 'N') skipPhase();
+    if (p.key === " ") toggleRun();
+    if (p.key === "r" || p.key === "R") resetPhase();
+    if (p.key === "n" || p.key === "N") skipPhase();
   };
 
-
-  p.windowResized = function () { p.resizeCanvas(p.windowWidth, p.windowHeight); };
+  p.windowResized = function () {
+    p.resizeCanvas(p.windowWidth, p.windowHeight);
+  };
 });
