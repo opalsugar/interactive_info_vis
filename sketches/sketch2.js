@@ -2,15 +2,65 @@
 registerSketch("sk2", function (p) {
   let startTime;
   let currentTaskIndex = 0;
-  let tasks = [
-    { task: "Wake Up", time: 30, color: "red" },
-    { task: "Shower", time: 15, color: "blue" },
-    { task: "Make Breakfast", time: 15, color: "green" },
-  ];
+  let tasks = [];
+  let timerStarted = false;
 
   p.setup = function () {
-    startTime = p.millis();
     p.createCanvas(800, 800);
+
+    nameInput = p.createInput("");
+    nameInput.position(10, 105);
+    nameInput.size(100, 30);
+    nameInput.attribute("placeholder", "Task Name");
+
+    timeInput = p.createInput("");
+    timeInput.position(10, 155);
+    timeInput.size(100, 30);
+    timeInput.attribute("placeholder", "Time (Minutes)");
+
+    addBtn = p.createButton("Add");
+    addBtn.size(100, 30);
+    addBtn.position(10, 205);
+
+    startBtn = p.createButton("Start");
+    startBtn.size(100, 30);
+    startBtn.position(10, 255);
+
+    addBtn.mousePressed(() => {
+      let taskName = nameInput.value();
+      let taskTime = parseInt(timeInput.value());
+      let taskColor = p.color(
+        p.random(75, 255),
+        p.random(75, 255),
+        p.random(75, 255)
+      );
+
+      // if (taskName === "" || isNaN(taskTime) || taskTime <= 0) {
+      //   p.text("", 400, 50);
+      //   p.text(
+      //     "Invalid input. Please enter a valid task name and time.",
+      //     400,
+      //     50
+      //   );
+      //   return;
+      // } else {
+      //   p.text("", 400, 50);
+      // }
+
+      tasks.push({ task: taskName, time: taskTime, color: taskColor });
+
+      nameInput.value("");
+      timeInput.value("");
+
+      p.redraw();
+
+      console.log(tasks);
+    });
+
+    startBtn.mousePressed(() => {
+      startTime = p.millis();
+      timerStarted = true;
+    });
   };
 
   p.clock = function () {
@@ -23,21 +73,18 @@ registerSketch("sk2", function (p) {
     p.background(220);
 
     // time setup
-    let currentTime = p.floor((p.millis() - startTime) / 1000);
+    let currentTime = timerStarted
+      ? p.floor((p.millis() - startTime) / 1000)
+      : 0;
     console.log(currentTime);
 
     p.fill(0);
     p.noStroke();
     p.textSize(16);
     p.text(currentTime, 20, 30);
-
-    // input boxes
     p.noFill();
     p.strokeWeight(1);
     p.stroke(0);
-    p.rect(20, 50, 100, 30);
-    p.rect(20, 100, 100, 30);
-    p.rect(20, 150, 100, 30);
 
     // full rectangle
     p.rect(170, 10, 300, 720);
@@ -75,26 +122,36 @@ registerSketch("sk2", function (p) {
       p.stroke(task.color);
       p.strokeWeight(4);
       p.rect(170, y, 300, task.time * 3);
+      p.strokeWeight(1);
+      p.fill(task.color);
+      p.textAlign(p.CENTER, p.CENTER);
+      p.text(
+        task.task + " - " + task.time + " mins",
+        320,
+        y + (task.time * 3) / 2
+      );
+      p.noFill();
       y += task.time * 3;
       p.noStroke();
     });
 
     y = 10;
     tasks.forEach((task, idx) => {
-      if (idx === currentTaskIndex) {
-        console.log("idx", idx);
-        let filledHeight = p.constrain(currentTime, 0, task.time * 3);
-        p.fill(task.color);
-        p.rect(170, y, 300, filledHeight);
-      } else if (idx < currentTaskIndex) {
-        p.fill(task.color);
-        p.rect(170, y, 300, task.time * 3);
+      if (timerStarted) {
+        if (idx === currentTaskIndex) {
+          let filledHeight = p.constrain(currentTime, 0, task.time * 3);
+          p.fill(task.color);
+          p.rect(170, y, 300, filledHeight);
+        } else if (idx < currentTaskIndex) {
+          p.fill(task.color);
+          p.rect(170, y, 300, task.time * 3);
+        }
+        y += task.time * 3;
+        p.noFill();
       }
-      y += task.time * 3;
-      p.noFill();
     });
 
-    if (currentTime >= tasks[currentTaskIndex].time * 3) {
+    if (timerStarted && currentTime >= tasks[currentTaskIndex].time * 3) {
       currentTaskIndex++;
       startTime = p.millis();
     }
