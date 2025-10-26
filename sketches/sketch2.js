@@ -39,7 +39,7 @@ registerSketch("sk2", function (p) {
     // button interactions
     // task is added to tasks array
     addBtn.mousePressed(() => {
-      let taskName = nameInput.value();
+      let taskName = nameInput.value().trim();
       let taskTime = parseInt(timeInput.value());
       let taskColor = p.color(
         p.random(75, 255),
@@ -47,17 +47,10 @@ registerSketch("sk2", function (p) {
         p.random(75, 255)
       );
 
-      // if (taskName === "" || isNaN(taskTime) || taskTime <= 0) {
-      //   p.text("", 400, 50);
-      //   p.text(
-      //     "Invalid input. Please enter a valid task name and time.",
-      //     400,
-      //     50
-      //   );
-      //   return;
-      // } else {
-      //   p.text("", 400, 50);
-      // }
+      if (taskName === "" || isNaN(taskTime) || taskTime <= 0) {
+        console.log("Invalid input. Please enter a valid task name and time.");
+        return;
+      }
 
       tasks.push({ task: taskName, time: taskTime, color: taskColor });
 
