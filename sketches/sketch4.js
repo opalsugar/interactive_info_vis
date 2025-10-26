@@ -1,10 +1,59 @@
 // Instance-mode sketch for tab 4
 registerSketch("sk4", function (p) {
+  // bathtub drawing using copilot, timer logic adapted from sketch 12
   // 0.0 = empty, 1.0 = at rim, >1.0 = overflow
   let fillRatio = 0;
+  let startBtn;
+  const showerTime = 0.25;
+
+  // State
+  let running = false;
+  let finished = false;
+  let startMs = 0;
+  let elapsedMs = 0;
 
   p.setup = function () {
     p.createCanvas(800, 800);
+    startBtn = p.createButton("Start");
+    startBtn.size(100, 30);
+    startBtn.position(220, 160);
+    startBtn.style("font-style", "italic");
+
+    pauseBtn = p.createButton("Pause");
+    pauseBtn.size(100, 30);
+    pauseBtn.position(350, 160);
+    pauseBtn.style("font-style", "italic");
+
+    resetBtn = p.createButton("Reset");
+    resetBtn.size(100, 30);
+    resetBtn.position(480, 160);
+    resetBtn.style("font-style", "italic");
+
+    startBtn.mousePressed(() => {
+      if (running) {
+        return;
+      }
+      fillLevel = 0;
+      startMs = p.millis();
+      running = true;
+    });
+
+    pauseBtn.mousePressed(() => {
+      if (!running) {
+        return;
+      }
+
+      elapsedMs += p.millis() - startMs;
+      running = false;
+    });
+
+    resetBtn.mousePressed(() => {
+      running = false;
+      finished = false;
+      startMs = 0;
+      elapsedMs = 0;
+      fillLevel = 0;
+    });
   };
 
   p.draw = function () {
