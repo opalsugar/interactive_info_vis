@@ -4,7 +4,7 @@ registerSketch("sk4", function (p) {
   // 0.0 = empty, 1.0 = at rim, >1.0 = overflow
   let fillRatio = 0;
   let startBtn, pauseBtn, endBtn, resetBtn;
-  const showerTime = 0.25;
+  const showerTime = 5;
 
   // State
   let running = false;
@@ -66,10 +66,9 @@ registerSketch("sk4", function (p) {
     });
 
     endBtn.mousePressed(() => {
-      if (!running) {
+      if (finished) {
         return;
       }
-
       elapsedMs += p.millis() - startMs;
       running = false;
       finished = true;
@@ -89,6 +88,20 @@ registerSketch("sk4", function (p) {
 
   p.draw = function () {
     p.background(245);
+    p.textSize(16);
+    p.textStyle(p.ITALIC);
+    p.fill(70, 150, 220);
+    p.text(
+      "Five minute showers are great to save time, water and energy!",
+      70,
+      50
+    );
+    p.text(
+      "Use this timer to see how long you shower and how much extra water you use.",
+      70,
+      80
+    );
+    p.fill(0);
 
     // center and scale
     let cx = p.width / 2;
@@ -103,6 +116,10 @@ registerSketch("sk4", function (p) {
     const remainMs = showerTimeMs - tMs;
     const overTime = remainMs < 0;
 
+    if (showerTimeMs > 0) {
+      fillRatio = tMs / showerTimeMs;
+    }
+
     if (overTime && !beeped) {
       p.fill("red");
       mySound.play();
@@ -112,6 +129,35 @@ registerSketch("sk4", function (p) {
     }
     p.textSize(90);
     p.text(mmssFormat(remainMs), 190, 330);
+
+    if (finished) {
+      const gallonsPerMs = 2.5 / 60000;
+      const gallonsPer5Mins = 2.5 * 5;
+      let gallonsUsed = elapsedMs * gallonsPerMs;
+      let extraGallons = gallonsUsed - gallonsPer5Mins;
+      p.textSize(16);
+      p.textStyle(p.ITALIC);
+      p.fill(70, 150, 220);
+      p.text(
+        "You used " +
+          gallonsUsed.toFixed(1) +
+          " gallons of water in today's shower.",
+        70,
+        600
+      );
+
+      if (extraGallons <= 0) {
+        p.text("Great job saving water today!", 70, 620);
+      } else {
+        p.text(
+          "That's " +
+            extraGallons.toFixed(1) +
+            " more than a five minute shower.",
+          70,
+          630
+        );
+      }
+    }
 
     // const isOver = remainMs < 0;
   };
@@ -149,7 +195,7 @@ registerSketch("sk4", function (p) {
     let inRatio = p.constrain(ratio, 0, 1);
 
     // water fill inside the tub
-    let waterH = innerH * inRatio;
+    let waterH = (innerH + wall) * inRatio;
     let waterY = innerY + (innerH - waterH);
 
     if (waterH > 0) {
@@ -241,7 +287,7 @@ registerSketch("sk4", function (p) {
       let puddleMax = 160 * s;
       let puddleW = p.min(overflowAmt * puddleMax, puddleMax);
       let puddleH = puddleW * 0.34;
-      let floorY = y + tubH + 10 * s;
+      let floorY = y + tubH;
 
       // fill + outline
       p.noStroke();
