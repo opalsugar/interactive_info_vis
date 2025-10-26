@@ -3,7 +3,7 @@ registerSketch("sk4", function (p) {
   // bathtub drawing using copilot, timer logic adapted from sketch 12
   // 0.0 = empty, 1.0 = at rim, >1.0 = overflow
   let fillRatio = 0;
-  let startBtn;
+  let startBtn, pauseBtn, endBtn, resetBtn;
   const showerTime = 0.25;
 
   // State
@@ -11,28 +11,45 @@ registerSketch("sk4", function (p) {
   let finished = false;
   let startMs = 0;
   let elapsedMs = 0;
+  let beeped = false;
+
+  let mySound;
+  p.preload = function () {
+    p.soundFormats("mp3");
+    mySound = p.loadSound("assets/beep");
+  };
 
   p.setup = function () {
     p.createCanvas(800, 800);
     startBtn = p.createButton("Start");
     startBtn.size(100, 30);
-    startBtn.position(220, 160);
+    startBtn.position(160, 160);
     startBtn.style("font-style", "italic");
 
     pauseBtn = p.createButton("Pause");
     pauseBtn.size(100, 30);
-    pauseBtn.position(350, 160);
+    pauseBtn.position(290, 160);
     pauseBtn.style("font-style", "italic");
+
+    endBtn = p.createButton("End");
+    endBtn.size(100, 30);
+    endBtn.position(420, 160);
+    endBtn.style("font-style", "italic");
 
     resetBtn = p.createButton("Reset");
     resetBtn.size(100, 30);
-    resetBtn.position(480, 160);
+    resetBtn.position(550, 160);
     resetBtn.style("font-style", "italic");
 
     startBtn.mousePressed(() => {
       if (running) {
         return;
       }
+
+      if (finished) {
+        return;
+      }
+
       fillLevel = 0;
       startMs = p.millis();
       running = true;
@@ -45,6 +62,18 @@ registerSketch("sk4", function (p) {
 
       elapsedMs += p.millis() - startMs;
       running = false;
+      mySound.pause();
+    });
+
+    endBtn.mousePressed(() => {
+      if (!running) {
+        return;
+      }
+
+      elapsedMs += p.millis() - startMs;
+      running = false;
+      finished = true;
+      mySound.stop();
     });
 
     resetBtn.mousePressed(() => {
@@ -53,6 +82,8 @@ registerSketch("sk4", function (p) {
       startMs = 0;
       elapsedMs = 0;
       fillLevel = 0;
+      mySound.stop();
+      beeped = false;
     });
   };
 
@@ -65,6 +96,24 @@ registerSketch("sk4", function (p) {
     let s = 1.0;
 
     drawBathtub(cx, cy, s, fillRatio);
+
+    // timer logic
+    const showerTimeMs = minutesToMs(showerTime);
+    const tMs = getElapsedMs();
+    const remainMs = showerTimeMs - tMs;
+    const overTime = remainMs < 0;
+
+    if (overTime && !beeped) {
+      p.fill("red");
+      mySound.play();
+      beeped = true;
+    } else {
+      p.fill(0);
+    }
+    p.textSize(90);
+    p.text(mmssFormat(remainMs), 190, 330);
+
+    // const isOver = remainMs < 0;
   };
 
   // Bathtub with shower head mounted on the tub rim (right), shifted slightly left; vertical stream to bottom
@@ -206,6 +255,31 @@ registerSketch("sk4", function (p) {
 
     // restore stroke state
     p.noStroke();
+  }
+
+  // logic (adapted from sketch12)
+  function getElapsedMs() {
+    return running ? p.millis() - startMs + elapsedMs : elapsedMs;
+  }
+
+  function minutesToMs(mins) {
+    return mins * 60 * 1000;
+  }
+
+  function msToMMSS(ms) {
+    const total = p.max(0, p.round(ms / 1000));
+    const m = p.floor(total / 60);
+    const s = total % 60;
+    return { mm: p.nf(m, 2), ss: p.nf(s, 2) };
+  }
+
+  function mmssFormat(ms) {
+    const { mm, ss } = msToMMSS(Math.abs(ms));
+    if (ms < 0) {
+      return "-" + mm + ":" + ss;
+    } else {
+      return mm + ":" + ss;
+    }
   }
 
   p.windowResized = function () {
