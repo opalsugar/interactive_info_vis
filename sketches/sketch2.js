@@ -5,7 +5,7 @@ registerSketch("sk2", function (p) {
   let tasks = [];
   let timerStarted = false;
   let nameInput, timeInput, addBtn, startBtn, nextTaskBtn;
-  let actualPlanHeights = [];
+  let currentTime, currentHeight;
 
   const px_per_min = 3;
 
@@ -77,6 +77,8 @@ registerSketch("sk2", function (p) {
 
     // moves to next task and resets start time
     nextTaskBtn.mousePressed(() => {
+      tasks[currentTaskIndex].actualHeight = currentHeight;
+      console.log(tasks);
       currentTaskIndex++;
       startTime = p.millis();
     });
@@ -86,10 +88,8 @@ registerSketch("sk2", function (p) {
     p.background(220);
 
     // time setup
-    let currentTime = timerStarted
-      ? p.floor((p.millis() - startTime) / 1000)
-      : 0;
-    let currentHeight = currentTime * px_per_min;
+    currentTime = timerStarted ? p.floor((p.millis() - startTime) / 1000) : 0;
+    currentHeight = currentTime * px_per_min;
 
     // text
     p.stroke(0);
@@ -97,7 +97,6 @@ registerSketch("sk2", function (p) {
     p.fill(0);
     p.textSize(16);
     p.textAlign(p.LEFT, p.BASELINE);
-    p.text(currentTime, 20, 30);
     p.text("Intended Plan", 270, 20);
     p.text("Actual Plan", 590, 20);
     p.text("6am", 130, 40);
@@ -134,32 +133,31 @@ registerSketch("sk2", function (p) {
 
     /// INTENDED PLAN - left side
     // filling in of rectangles by minute increments y
-    let yL = 30;
+    let yL = 32;
     p.noStroke();
     tasks.forEach((task, idx) => {
       let plannedHeight = task.time * px_per_min;
       if (timerStarted && idx === currentTaskIndex) {
         let plannedHeight = task.time * px_per_min;
-        let filledHeight = p.constrain(currentTime, 0, plannedHeight);
+        let filledHeight = p.constrain(currentHeight, 0, plannedHeight);
         p.fill(task.color);
-        p.rect(170, yL, 300, filledHeight);
+        p.rect(171, yL, 296, filledHeight);
       } else if (idx < currentTaskIndex) {
         p.fill(task.color);
-        p.rect(170, yL, 300, plannedHeight);
+        p.rect(171, yL, 296, plannedHeight);
       }
       yL += plannedHeight;
       p.noFill();
     });
 
     // borders and text for each task
-    yL = 30;
+    yL = 32;
     tasks.forEach((task) => {
       let plannedHeight = task.time * px_per_min;
       p.stroke(task.color);
-      p.strokeWeight(4);
-      p.rect(170, yL, 300, plannedHeight);
+      p.rect(171, yL, 296, plannedHeight);
       p.noStroke();
-      p.strokeWeight(1);
+      p.strokeWeight(4);
       p.fill("black");
       p.textAlign(p.CENTER, p.CENTER);
       p.text(
@@ -172,42 +170,18 @@ registerSketch("sk2", function (p) {
       p.noStroke();
     });
 
-    // COME BACK TO MAKE AUTO ADVANCE WORK FOR LEFT maybe?
-    //   if (
-    //     timerStarted &&
-    //     currentTime >= tasks[currentTaskIndex].time * px_per_min
-    //   ) {
-    //     currentTaskIndex++;
-    //     startTime = p.millis();
-    //   }
-    // };
-
     /// ACTUAL PLAN - right side
     yR = 30;
     tasks.forEach((task, idx) => {
-      let plannedHeight = task.time * px_per_min;
-      let actualHeight = 0;
-
+      p.fill(task.color);
       if (timerStarted && idx === currentTaskIndex) {
-        actualHeight = currentHeight;
+        p.rect(471, yR, 300, currentHeight);
+      } else if (idx < currentTaskIndex) {
+        p.rect(471, yR, 300, task.actualHeight);
+        console.log("height", task.actualHeight);
       }
 
-      if (actualHeight > 0) {
-        p.fill(task.color);
-        p.rect(470, yR, 300, actualHeight);
-        p.noFill();
-      }
-
-      let stackHeight;
-      if (idx < currentTaskIndex) {
-        stackHeight = actualHeight;
-      } else if (idx === currentTaskIndex) {
-        stackH = actualHeight;
-      } else {
-        stackHeight = plannedHeight;
-      }
-
-      yR += stackHeight;
+      yR += task.actualHeight;
     });
 
     // p.rect(470, y, 300, filledHeight); border
