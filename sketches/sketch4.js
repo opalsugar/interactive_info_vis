@@ -3,10 +3,6 @@ registerSketch("sk4", function (p) {
   // 0.0 = empty, 1.0 = at rim, >1.0 = overflow
   let fillRatio = 5; // change this manually for now; later you can map time -> fillRatio
 
-  p.setup = function () {
-    p.createCanvas(p.windowWidth, p.windowHeight);
-  };
-
   p.draw = function () {
     p.background(245);
 

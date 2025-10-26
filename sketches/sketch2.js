@@ -81,7 +81,7 @@ registerSketch("sk2", function (p) {
     p.background(220);
 
     // time setup
-    currentTime = timerStarted ? p.floor((p.millis() - startTime) / 1000) : 0;
+    currentTime = timerStarted ? p.floor((p.millis() - startTime) / 60000) : 0;
     currentHeight = currentTime * px_per_min;
 
     // text

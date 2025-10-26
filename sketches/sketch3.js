@@ -1,15 +1,36 @@
 // Instance-mode sketch for tab 3
 registerSketch("sk3", function (p) {
+  let startBtn;
   // 0.0 = empty, 1.0 = full
-  let coffeeLevel = 1.0;
+  let coffeeLevel = 1;
+
+  let mySound;
+  p.preload = function () {
+    p.soundFormats("mp3");
+    mySound = p.loadSound("assets/coffeemeditation");
+  };
 
   p.setup = function () {
-    p.createCanvas(p.windowWidth, p.windowHeight);
+    p.createCanvas(800, 800);
+    startBtn = p.createButton("Start");
+    startBtn.size(100, 30);
+    startBtn.position(350, 230);
+    startBtn.style("font-style", "italic");
+
+    startBtn.mousePressed(() => {
+      mySound.play();
+    });
   };
 
   p.draw = function () {
     // background
     p.background(200);
+    p.fill(0);
+    p.textSize(16);
+    p.textStyle(p.ITALIC);
+    p.textAlign(p.CENTER);
+    p.text("coffee meditation.", 400, 100);
+    p.text("grab a cup of coffee, sip, and start your day.", 400, 150);
 
     // center position and scale
     let cx = p.width / 2;
@@ -30,7 +51,7 @@ registerSketch("sk3", function (p) {
     // Saucer (optional)
     p.noStroke();
     p.fill(230);
-    p.ellipse(cx, cy + cupH * 0.55, cupW * 1.2, wall * 5);
+    p.ellipse(cx, cy + cupH, cupW * 1.2, wall * 5);
 
     // Cup body (outer)
     let x = cx - cupW / 2;
@@ -103,6 +124,6 @@ registerSketch("sk3", function (p) {
   }
 
   p.windowResized = function () {
-    p.resizeCanvas(p.windowWidth, p.windowHeight);
+    p.resizeCanvas(800, 800);
   };
 });
