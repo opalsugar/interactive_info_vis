@@ -1,6 +1,13 @@
 // Instance-mode sketch for tab 3
 registerSketch("sk3", function (p) {
   let startBtn;
+  const medTime = 5;
+
+  // State
+  let running = false;
+  let startMs = 0;
+  let elapsedMs = 0;
+
   // 0.0 = empty, 1.0 = full
   let coffeeLevel = 1;
 
@@ -19,6 +26,9 @@ registerSketch("sk3", function (p) {
 
     startBtn.mousePressed(() => {
       mySound.play();
+      startMs = p.millis();
+      elapsedMs = 0;
+      running = true;
     });
   };
 
@@ -38,6 +48,15 @@ registerSketch("sk3", function (p) {
     let s = 2.0; // scale factor, adjust if you want bigger/smaller
 
     drawCoffeeCup(cx, cy, s, coffeeLevel);
+
+    const medTimeMs = minutesToMs(medTime);
+    const tMs = p.constrain(getElapsedMs(), 0, medTimeMs);
+    const remainMs = p.max(0, medTimeMs - tMs);
+    const { mm, ss } = msToMMSS(remainMs);
+    p.fill(60, 40, 70);
+    p.textSize(44);
+    p.fill(255);
+    p.text(`${mm}:${ss}`, 395, 400);
   };
 
   // Draw a coffee cup with handle and coffee fill
@@ -121,6 +140,21 @@ registerSketch("sk3", function (p) {
     p.noStroke();
     p.fill(0, 0, 0, 18);
     p.ellipse(cx, cy + cupH * 0.52, cupW * 0.9, wall * 3);
+  }
+
+  function getElapsedMs() {
+    return running ? p.millis() - startMs + elapsedMs : elapsedMs;
+  }
+
+  function minutesToMs(mins) {
+    return mins * 60 * 1000;
+  }
+
+  function msToMMSS(ms) {
+    const total = p.max(0, p.round(ms / 1000));
+    const m = p.floor(total / 60);
+    const s = total % 60;
+    return { mm: p.nf(m, 2), ss: p.nf(s, 2) };
   }
 
   p.windowResized = function () {
