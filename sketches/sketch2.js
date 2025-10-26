@@ -182,10 +182,36 @@ registerSketch("sk2", function (p) {
       }
 
       yR += task.actualHeight;
+      p.noFill();
     });
 
-    // p.rect(470, y, 300, filledHeight); border
-    // p.text(task.task + " - " + task.time + " mins", 620, y + (task.time * px_per_min) / 2); text
+    // borders and text
+    yR = 32;
+    tasks.forEach((task, idx) => {
+      let plannedHeight = task.time * px_per_min;
+      let borderHeight = 0;
+
+      if (timerStarted && idx === currentTaskIndex) {
+        if (currentHeight > plannedHeight) {
+          // over time
+          borderHeight = currentHeight;
+        } else {
+          // under or equal time
+          borderHeight = plannedHeight;
+        }
+      } else if (idx < currentTaskIndex) {
+        borderHeight = task.actualHeight;
+      } else {
+        // future task
+        borderHeight = plannedHeight;
+      }
+
+      p.stroke(task.color);
+      p.rect(471, yR, 300, borderHeight);
+      yR += borderHeight;
+      p.noFill();
+      p.noStroke();
+    });
 
     p.windowResized = function () {
       p.resizeCanvas(p.windowWidth, p.windowHeight);
