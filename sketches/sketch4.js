@@ -152,7 +152,7 @@ registerSketch("sk4", function (p) {
         p.text(
           "That's " +
             extraGallons.toFixed(1) +
-            " more than a five minute shower.",
+            " gallons more than a five minute shower.",
           70,
           630
         );
