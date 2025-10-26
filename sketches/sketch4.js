@@ -1,7 +1,11 @@
 // Instance-mode sketch for tab 4
 registerSketch("sk4", function (p) {
   // 0.0 = empty, 1.0 = at rim, >1.0 = overflow
-  let fillRatio = 5; // change this manually for now; later you can map time -> fillRatio
+  let fillRatio = 0;
+
+  p.setup = function () {
+    p.createCanvas(800, 800);
+  };
 
   p.draw = function () {
     p.background(245);
@@ -14,7 +18,7 @@ registerSketch("sk4", function (p) {
     drawBathtub(cx, cy, s, fillRatio);
   };
 
-  // Draw a bathtub with water and incremental overflow
+  // Bathtub with shower head mounted on the tub rim (right), shifted slightly left; vertical stream to bottom
   function drawBathtub(cx, cy, s, ratio) {
     // tub geometry
     let tubW = 480 * s;
@@ -29,7 +33,7 @@ registerSketch("sk4", function (p) {
     // saucer-like floor shadow
     p.noStroke();
     p.fill(0, 0, 0, 20);
-    p.ellipse(cx, cy + tubH * 0.58, tubW * 0.9, wall * 4);
+    p.ellipse(cx, cy - 15 + tubH * 0.58, tubW * 1.1, wall * 4);
 
     // tub outer shell
     p.stroke(40);
@@ -44,13 +48,7 @@ registerSketch("sk4", function (p) {
     let innerH = tubH - wall * 2;
 
     // clamp in-tub ratio [0..1]
-    let inRatio = ratio;
-    if (inRatio < 0) {
-      inRatio = 0;
-    }
-    if (inRatio > 1) {
-      inRatio = 1;
-    }
+    let inRatio = p.constrain(ratio, 0, 1);
 
     // water fill inside the tub
     let waterH = innerH * inRatio;
@@ -61,12 +59,6 @@ registerSketch("sk4", function (p) {
       p.noStroke();
       p.fill(70, 150, 220);
       p.rect(innerX, waterY, innerW, waterH, rimR * 0.55, rimR * 0.55, 6, 6);
-
-      // subtle meniscus highlight
-      if (waterH > 8 * s) {
-        p.fill(90, 170, 240);
-        p.rect(innerX, waterY, innerW, 8 * s, rimR * 0.5, rimR * 0.5, 3, 3);
-      }
     }
 
     // re-draw rim on top of water edges
@@ -75,97 +67,81 @@ registerSketch("sk4", function (p) {
     p.strokeWeight(2);
     p.rect(x, y, tubW, tubH, rimR);
 
-    // faucet/spout (simple)
-    let spoutX = x + tubW * 0.15;
-    let spoutY = y - 18 * s;
+    // --- Shower assembly on the tub rim (right), shifted slightly left ---
+    // Riser pipe anchored on the inner rim (inside the tub)
+    const riserX = innerX + innerW - 16 * s; // near inner right wall
+    const riserTopY = innerY - 200 * s; // height above rim
+    const riserW = 10 * s;
+
     p.noStroke();
-    p.fill(210);
-    p.rect(spoutX, spoutY, 60 * s, 18 * s, 6 * s);
-    p.rect(spoutX + 48 * s, spoutY + 8 * s, 12 * s, 26 * s, 6 * s);
+    p.fill(200);
+    // vertical riser from rim up
+    p.rect(
+      riserX - riserW / 2,
+      riserTopY,
+      riserW,
+      innerY - riserTopY + 4 * s,
+      6 * s
+    );
+
+    // Move the head and stream slightly left from the riser
+    const offsetIn = 80 * s; // how far to shift inward (left)
+    let headCx = riserX - offsetIn;
+    let headCy = riserTopY + 10 * s;
+    let headW = 48 * s;
+    let headH = 30 * s;
+
+    // Connecting pipe from riser to head: horizontal arm + short vertical drop
+    const armY = riserTopY + 6 * s; // arm height a bit below riser top for a clean elbow
+    const armThick = 10 * s;
+
+    // horizontal arm from riser to over the head
+    p.rect(headCx, armY - armThick / 2, riserX - headCx, armThick, 5 * s);
+    // short drop from arm to head
+    p.rect(headCx - armThick / 2, armY, armThick, headCy - armY, 5 * s);
+
+    // shower head (horizontal ellipse), bottom is the nozzle face
     p.fill(180);
-    p.rect(spoutX + 48 * s, y - 10 * s, 12 * s, 8 * s, 3 * s);
+    p.ellipse(headCx, headCy, headW, headH);
+    p.fill(150);
+    p.ellipse(headCx, headCy + headH * 0.06, headW * 0.78, headH * 0.62);
 
-    // feet
-    let footW = 28 * s;
-    let footH = 18 * s;
-    p.fill(225);
+    // bottom nozzle holes (single row across underside)
+    p.fill(110);
+    let holes = 7;
+    for (let i = 0; i < holes; i++) {
+      let t = i / (holes - 1);
+      let hx = p.lerp(headCx - headW * 0.32, headCx + headW * 0.32, t);
+      let hy = headCy + headH * 0.32;
+      p.ellipse(hx, hy, 3 * s, 3 * s);
+    }
+
+    // Single thicker stream: vertical, from head bottom to inside bottom of tub
+    let streamW = 24 * s;
+    let baseX = headCx;
+    let baseY = headCy + headH * 0.35; // underside of head
+    let targetX = baseX;
+    let targetY = innerY + innerH - 2 * s; // bottom inside tub
+    let length = p.max(0, targetY - baseY);
+
+    // draw vertical stream (rounded rect)
     p.noStroke();
-    p.rect(x + 42 * s, y + tubH - footH, footW, footH, 6 * s);
-    p.rect(x + tubW - 42 * s - footW, y + tubH - footH, footW, footH, 6 * s);
+    // core
+    if (running) {
+      p.fill(58, 140, 220, 240);
+      p.rect(baseX - streamW / 2, baseY, streamW, length, 10 * s);
+    }
 
-    // overflow when ratio > 1.0
+    // Overflow when ratio > 1.0 -> puddle and droplets (keep near right side)
     if (ratio > 1) {
-      let overflowAmt = ratio - 1;
-      if (overflowAmt < 0) {
-        overflowAmt = 0;
-      }
+      let overflowAmt = p.max(0, ratio - 1);
 
-      // Spill point (pushed slightly right so it's clearly visible)
-      let rimTopY = y + wall; // inner rim top
-      let overflowX = x + tubW * 0.82; // right side spill
+      // spill near right side
+      let overflowX = x + tubW * 0.82;
 
-      // Stream and puddle scaling
-      let streamMax = 180 * s;
+      // puddle scaling
       let puddleMax = 160 * s;
-
-      // Stream height grows with overflow
-      let streamH = overflowAmt * streamMax;
-      if (streamH > streamMax) {
-        streamH = streamMax;
-      }
-
-      // Thicker, more opaque stream core; nudge up to overlap rim line
-      let streamW = 28 * s;
-      p.noStroke();
-      p.fill(58, 140, 220, 235);
-      p.rect(
-        overflowX - streamW / 2,
-        rimTopY - 2 * s,
-        streamW,
-        streamH + 2 * s,
-        10 * s
-      );
-
-      // Bright highlight stripe on the left edge of the stream
-      p.fill(120, 195, 255, 180);
-      p.rect(
-        overflowX - streamW * 0.45,
-        rimTopY - 2 * s,
-        streamW * 0.18,
-        streamH + 2 * s,
-        8 * s
-      );
-
-      // Soft edge outline for the stream to separate it from the tub
-      p.noFill();
-      p.stroke(35, 95, 160, 160);
-      p.strokeWeight(2);
-      p.rect(
-        overflowX - streamW / 2,
-        rimTopY - 2 * s,
-        streamW,
-        streamH + 2 * s,
-        10 * s
-      );
-
-      // Foam at the rim to make the start of the stream obvious
-      p.noStroke();
-      p.fill(255, 255, 255, 210);
-      let f = 0;
-      let foamN = 6;
-      while (f < foamN) {
-        let fx = overflowX + (f - foamN / 2) * 6 * s;
-        let fy = rimTopY - 6 * s + (f % 2) * 2 * s;
-        let fr = 8 * s - f * 0.6 * s;
-        p.ellipse(fx, fy, fr, fr * 0.9);
-        f = f + 1;
-      }
-
-      // Puddle with outline for contrast
-      let puddleW = overflowAmt * puddleMax;
-      if (puddleW > puddleMax) {
-        puddleW = puddleMax;
-      }
+      let puddleW = p.min(overflowAmt * puddleMax, puddleMax);
       let puddleH = puddleW * 0.34;
       let floorY = y + tubH + 10 * s;
 
@@ -177,34 +153,13 @@ registerSketch("sk4", function (p) {
       p.stroke(35, 95, 160, 150);
       p.strokeWeight(2);
       p.ellipse(overflowX, floorY, puddleW, puddleH);
-
-      // Bigger droplets along the stream
-      p.noStroke();
-      let i = 0;
-      let dotCount = 5;
-      while (i < dotCount) {
-        let dx = (i - 2) * 12 * s;
-        let dy = 24 * s + i * 16 * s;
-        let r = 6 * s + i * 1.2 * s;
-        if (streamH > dy) {
-          p.fill(120, 195, 255, 210);
-          p.ellipse(overflowX + dx, rimTopY + dy, r, r * 1.25);
-        }
-        i = i + 1;
-      }
     }
-
-    // subtle rim highlight
-    p.noFill();
-    p.stroke(255, 255, 255, 130);
-    p.strokeWeight(3);
-    p.arc(cx, y + 2 * s, tubW - 12 * s, rimR * 2.4, p.PI, 0);
 
     // restore stroke state
     p.noStroke();
   }
 
   p.windowResized = function () {
-    p.resizeCanvas(p.windowWidth, p.windowHeight);
+    p.resizeCanvas(800, 800);
   };
 });

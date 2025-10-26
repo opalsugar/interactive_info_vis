@@ -185,7 +185,7 @@ registerSketch("sk3", function (p) {
     p.ellipse(cx, cy + cupH * 0.52, cupW * 0.9, wall * 3);
   }
 
-  // logic (taken from sketch12)
+  // logic (adapted from sketch12)
   function getElapsedMs() {
     return running ? p.millis() - startMs + elapsedMs : elapsedMs;
   }
