@@ -1,14 +1,14 @@
 // Instance-mode sketch for tab 3
+// used copilot for drawing coffee cup, added logic based on sketch12
 registerSketch("sk3", function (p) {
   let startBtn;
   const medTime = 5;
 
   // State
   let running = false;
+  let finished = false;
   let startMs = 0;
   let elapsedMs = 0;
-
-  // 0.0 = empty, 1.0 = full
   let coffeeLevel = 1;
 
   let mySound;
@@ -21,14 +21,45 @@ registerSketch("sk3", function (p) {
     p.createCanvas(800, 800);
     startBtn = p.createButton("Start");
     startBtn.size(100, 30);
-    startBtn.position(350, 230);
+    startBtn.position(220, 230);
     startBtn.style("font-style", "italic");
 
+    pauseBtn = p.createButton("Pause");
+    pauseBtn.size(100, 30);
+    pauseBtn.position(350, 230);
+    pauseBtn.style("font-style", "italic");
+
+    resetBtn = p.createButton("Reset");
+    resetBtn.size(100, 30);
+    resetBtn.position(480, 230);
+    resetBtn.style("font-style", "italic");
+
     startBtn.mousePressed(() => {
+      if (running) {
+        return;
+      }
       mySound.play();
       startMs = p.millis();
-      elapsedMs = 0;
       running = true;
+    });
+
+    pauseBtn.mousePressed(() => {
+      if (!running) {
+        return;
+      }
+
+      elapsedMs += p.millis() - startMs;
+      running = false;
+      mySound.pause();
+    });
+
+    resetBtn.mousePressed(() => {
+      running = false;
+      finished = false;
+      startMs = 0;
+      elapsedMs = 0;
+      coffeeLevel = 1;
+      mySound.stop();
     });
   };
 
@@ -39,8 +70,9 @@ registerSketch("sk3", function (p) {
     p.textSize(16);
     p.textStyle(p.ITALIC);
     p.textAlign(p.CENTER);
-    p.text("coffee meditation.", 400, 100);
-    p.text("grab a cup of coffee, sip, and start your day.", 400, 150);
+    p.text("morning coffee meditation.", 400, 100);
+    p.text("grab a cup of coffee, sip, and stay a while.", 400, 150);
+    p.text("source: https://www.youtube.com/watch?v=KPoxK5aDEhU", 400, 780);
 
     // center position and scale
     let cx = p.width / 2;
@@ -49,14 +81,25 @@ registerSketch("sk3", function (p) {
 
     drawCoffeeCup(cx, cy, s, coffeeLevel);
 
+    // timer logic
     const medTimeMs = minutesToMs(medTime);
     const tMs = p.constrain(getElapsedMs(), 0, medTimeMs);
     const remainMs = p.max(0, medTimeMs - tMs);
     const { mm, ss } = msToMMSS(remainMs);
     p.fill(60, 40, 70);
     p.textSize(44);
-    p.fill(255);
+    p.fill(0);
     p.text(`${mm}:${ss}`, 395, 400);
+
+    coffeeLevel = p.constrain(1 - tMs / medTimeMs, 0, 1);
+
+    if (tMs >= medTimeMs) {
+      elapsedMs = medTimeMs;
+      running = false;
+      finished = true;
+      p.textSize(28);
+      p.text("now you're ready to start your day.", 400, 730);
+    }
   };
 
   // Draw a coffee cup with handle and coffee fill
@@ -142,6 +185,7 @@ registerSketch("sk3", function (p) {
     p.ellipse(cx, cy + cupH * 0.52, cupW * 0.9, wall * 3);
   }
 
+  // logic (taken from sketch12)
   function getElapsedMs() {
     return running ? p.millis() - startMs + elapsedMs : elapsedMs;
   }
