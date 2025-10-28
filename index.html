@@ -1,150 +1,465 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.10/lib/p5.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.10/lib/addons/p5.sound.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <title>INFO 474: Interactive Information Visualization</title>
+  </head>
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="https://cdn.jsdelivr.net/npm/p5@1.11.10/lib/p5.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/p5@1.11.10/lib/addons/p5.sound.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="style.css">
-  <title>INFO 474: Interactive Information Visualization</title>
-</head>
+  <body>
+    <main>
+      <nav class="tabs" role="tablist" aria-label="Main tabs">
+        <button
+          type="button"
+          class="tab-btn active"
+          data-target="tab1"
+          data-sketch="sk1"
+          role="tab"
+          aria-selected="true"
+        >
+          Lab 1
+        </button>
 
-<body>
-  <main>
-    <nav class="tabs" role="tablist" aria-label="Main tabs">
-      <button type="button" class="tab-btn active" data-target="tab1" data-sketch="sk1" role="tab"
-        aria-selected="true">Lab 1</button>
+        <!-- Homework 4 -->
+        <button type="button" class="tab-btn" data-target="hwk4" role="tab">
+          HWK 4. Desc
+        </button>
+        <button
+          type="button"
+          class="tab-btn"
+          data-target="tab2"
+          data-sketch="sk2"
+          role="tab"
+        >
+          HWK 4. A
+        </button>
+        <button
+          type="button"
+          class="tab-btn"
+          data-target="tab3"
+          data-sketch="sk3"
+          role="tab"
+        >
+          HWK 4. B
+        </button>
+        <button
+          type="button"
+          class="tab-btn"
+          data-target="tab4"
+          data-sketch="sk4"
+          role="tab"
+        >
+          HWK 4. C
+        </button>
 
-      <!-- Homework 4 -->
-      <button type="button" class="tab-btn" data-target="hwk4" role="tab">HWK 4. Desc</button>
-      <button type="button" class="tab-btn" data-target="tab2" data-sketch="sk2" role="tab">HWK 4. A</button>
-      <button type="button" class="tab-btn" data-target="tab3" data-sketch="sk3" role="tab">HWK 4. B</button>
-      <button type="button" class="tab-btn" data-target="tab4" data-sketch="sk4" role="tab">HWK 4. C</button>
+        <!-- Examples -->
+        <button
+          type="button"
+          class="tab-btn"
+          data-target="tab5"
+          data-sketch="sk5"
+          role="tab"
+        >
+          Ex 1
+        </button>
+        <button
+          type="button"
+          class="tab-btn"
+          data-target="tab6"
+          data-sketch="sk6"
+          role="tab"
+        >
+          Ex 2
+        </button>
+        <button
+          type="button"
+          class="tab-btn"
+          data-target="tab7"
+          data-sketch="sk7"
+          role="tab"
+        >
+          Ex 3
+        </button>
+        <button
+          type="button"
+          class="tab-btn"
+          data-target="tab8"
+          data-sketch="sk8"
+          role="tab"
+        >
+          Ex 4
+        </button>
+        <button
+          type="button"
+          class="tab-btn"
+          data-target="tab9"
+          data-sketch="sk9"
+          role="tab"
+        >
+          Ex 5
+        </button>
+        <button
+          type="button"
+          class="tab-btn"
+          data-target="tab10"
+          data-sketch="sk10"
+          role="tab"
+        >
+          Ex 6
+        </button>
+        <button
+          type="button"
+          class="tab-btn"
+          data-target="tab11"
+          data-sketch="sk11"
+          role="tab"
+        >
+          Ex 7
+        </button>
+        <button
+          type="button"
+          class="tab-btn"
+          data-target="tab12"
+          data-sketch="sk12"
+          role="tab"
+        >
+          Ex 8
+        </button>
+        <button
+          type="button"
+          class="tab-btn"
+          data-target="tab13"
+          data-sketch="sk13"
+          role="tab"
+        >
+          Ex 9
+        </button>
+        <button
+          type="button"
+          class="tab-btn"
+          data-target="tab14"
+          data-sketch="sk14"
+          role="tab"
+        >
+          Ex 10
+        </button>
+      </nav>
+
+      <!-- Lab 1: Homepage -->
+      <section id="tab1" class="tab-content active" role="tabpanel">
+        <div id="sketch-container-sk1" class="sketch-container"></div>
+      </section>
+
+      <!-- Homework 4: Description -->
+      <section id="hwk4" class="tab-content" role="tabpanel">
+        <div id="sketch-container-hwk4" class="sketch-container">
+          <iframe
+            style="width: 100%; height: 100vh"
+            src="https://docs.google.com/document/d/e/2PACX-1vStWpfAr_ukylK6MoihGQ8B2IFGSJ1NsmhIY65TCaeVNoOeorFFPLv_bMz8De6r8qKsv-NMguUh5E8N/pub?embedded=true"
+          ></iframe>
+        </div>
+      </section>
+
+      <!-- Homework 4: Sketch 1 -->
+      <section id="tab2" class="tab-content" role="tabpanel">
+        <div id="sketch-container-sk2" class="sketch-container"></div>
+        <div id="sketch-drawing-sk2" class="sketch-evolution">
+          <!-- Project narrative template: replace the text below with your own narrative -->
+          <div class="sketch-narrative" aria-labelledby="sk2-narrative-title">
+            <h3 id="sk2-narrative-title">Sketch Narrative</h3>
+            <p>
+              <strong>Context</strong></p>
+              <p>
+              This prototype allows users to plan
+              their morning at the start of the day or the night before,
+              starting at 6am and going till 10am. The point of this prototype
+              is to allow users to understand how long their morning routine
+              tasks actually take them, and dynamically show them when they'll
+              be done with their tasks based on how long it actually takes them
+              to complete each task.
+            </p>
+            <strong>Design Decisions</strong>
+                <ul>
+                  <li>
+                    <strong>Tabular Format:</strong> This clock follows a
+                    tabular format where each task fills up slowly over time.
+                    This is similar to a google calendar setup that time
+                    blockers commonly use, making it intuitive to what users may
+                    already be used to and allows the actual and intended plan
+                    to be easy to read. One constraint is that the timer does
+                    not automatically check actual time and is limited to 6 to
+                    10am.
+                  </li>
+                  <li>
+                    <strong>Pastel Colors:</strong> For each task, colors are
+                    randomly generated using RGB values but will always be light
+                    or pastel colored. This guarantees that the text inside each
+                    task will always be readable regardless of the randomly
+                    generated task color.
+                  </li>
+                  <li>
+                    <strong>Interaction:</strong> Rather than using a task
+                    dictionary, this prototype allows users to add their own
+                    task names and task times to the calendar, making it fully
+                    customizable to their morning routine.
+                  </li>
+                </ul>
+                <strong>Future Work</strong>
+                <ul>
+                  <li>
+                    <strong>Setting Time Frame:</strong> Making it so the user
+                    can decide on the total time interval. For example, they
+                    could select 5 hours and the clock auto adjusts to be from
+                    6am to 11am.
+                  </li>
+                  <li>
+                    <strong>Tracking Actual Time:</strong> A good future change
+                    could be making it so the user inputs a total time frame and
+                    then when they click "Start", it auto-adjusts to the
+                    starting time and time frame. For example, a user can select
+                    5 hours and start the timer at 8am, and the clock adjusts to
+                    be from 8am to 1pm.
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+
+          <h3>Sketch evolution</h3>
+          <p class="small-note">
+            Replace <b>these images</b> with your own sketch evolution images.
+          </p>
+          <figure>
+            <!-- <img src="images/sk2-evolution-1.png" alt="Sketch #A - step 1" /> -->
+            <figcaption>
+              Step 1 — initial layout and annotated design decisions
+            </figcaption>
+          </figure>
+          <figure>
+            <!-- <img src="images/sk2-evolution-2.png" alt="Sketch #A - step 2" /> -->
+            <figcaption>Step 2 — second layout after peer feedback</figcaption>
+          </figure>
+          <figure>
+            <!-- <img src="images/sk2-evolution-3.png" alt="Sketch #A - step 3" /> -->
+            <figcaption>Step 3 — refined visuals and annotations</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Homework 4: Sketch 2 -->
+      <section id="tab3" class="tab-content" role="tabpanel">
+        <div id="sketch-container-sk3" class="sketch-container"></div>
+        <div id="sketch-drawing-sk2" class="sketch-evolution">
+          <!-- Project narrative template: replace the text below with your own narrative -->
+          <div class="sketch-narrative" aria-labelledby="sk2-narrative-title">
+            <h3 id="sk2-narrative-title">Sketch Narrative</h3>
+            <p>
+              <strong>Context</strong></p>
+              <p>
+                This prototype is focused on creating some space in a person's morning routine to
+                focus on mindfulness by combining it with their morning coffee. It includes a
+                calming 5-minute meditation focused on morning coffee sourced from YouTube,
+                where the user focuses on their breathing and sipping their drink to get some
+                relaxation in even during busy mornings.
+            </p>
+            <strong>Design Decisions</strong>
+                <ul>
+                  <li>
+                    <strong>Coffee Cup Design:</strong> This clock follows a
+                    tabular format where each task fills up slowly over time.
+                    This is similar to a google calendar setup that time
+                    blockers commonly use, making it intuitive to what users may
+                    already be used to and allows the actual and intended plan
+                    to be easy to read. One constraint is that the timer does
+                    not automatically check actual time and is limited to 6 to
+                    10am.
+                  </li>
+                  <li>
+                    <strong>Meditation Audio:</strong> For each task, colors are
+                    randomly generated using RGB values but will always be light
+                    or pastel colored. This guarantees that the text inside each
+                    task will always be readable regardless of the randomly
+                    generated task color.
+                  </li>
+                  <li>
+                    <strong>Start, Pause and Reset Buttons:</strong> Rather than using a task
+                    dictionary, this prototype allows users to add their own
+                    task names and task times to the calendar, making it fully
+                    customizable to their morning routine.
+                  </li>
+                </ul>
+                <strong>Future Work</strong>
+                <ul>
+                  <li>
+                    <strong>Different Coffee Drinks:</strong> Making it so the user
+                    can decide on the total time interval. For example, they
+                    could select 5 hours and the clock auto adjusts to be from
+                    6am to 11am.
+                  </li>
+                  <li>
+                    <strong>Different Meditations and Times:</strong> A good future change
+                    could be making it so the user inputs a total time frame and
+                    then when they click "Start", it auto-adjusts to the
+                    starting time and time frame. For example, a user can select
+                    5 hours and start the timer at 8am, and the clock adjusts to
+                    be from 8am to 1pm.
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+
+          <h3>Sketch evolution</h3>
+          <p class="small-note">
+            Replace <b>these images</b> with your own sketch evolution images.
+          </p>
+          <figure>
+            <!-- <img src="images/sk2-evolution-1.png" alt="Sketch #A - step 1" /> -->
+            <figcaption>
+              Step 1 — initial layout and annotated design decisions
+            </figcaption>
+          </figure>
+          <figure>
+            <!-- <img src="images/sk2-evolution-2.png" alt="Sketch #A - step 2" /> -->
+            <figcaption>Step 2 — second layout after peer feedback</figcaption>
+          </figure>
+          <figure>
+            <!-- <img src="images/sk2-evolution-3.png" alt="Sketch #A - step 3" /> -->
+            <figcaption>Step 3 — refined visuals and annotations</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Homework 4: Sketch 3 -->
+      <section id="tab4" class="tab-content" role="tabpanel">
+        <div id="sketch-container-sk4" class="sketch-container"></div>
+        <div id="sketch-drawing-sk2" class="sketch-evolution">
+          <!-- Project narrative template: replace the text below with your own narrative -->
+          <div class="sketch-narrative" aria-labelledby="sk2-narrative-title">
+            <h3 id="sk2-narrative-title">Sketch Narrative</h3>
+            <p>
+              <strong>Context</strong></p>
+              <p>
+                This prototype is focused on encouraging users to take shorter showers,
+                both to increase the amount of time they have in the mornings and also
+                to be sustainable with their water usage. When the timer ends, an alarm
+                goes off, but the timer continues and the tub overflows to show excess
+                water usage and to track how long the user's shower lasts.
+            </p>
+            <strong>Design Decisions</strong>
+                <ul>
+                  <li>
+                    <strong>Time Selection:</strong> This clock follows a
+                    tabular format where each task fills up slowly over time.
+                    This is similar to a google calendar setup that time
+                    blockers commonly use, making it intuitive to what users may
+                    already be used to and allows the actual and intended plan
+                    to be easy to read. One constraint is that the timer does
+                    not automatically check actual time and is limited to 6 to
+                    10am.
+                  </li>
+                  <li>
+                    <strong>Sustainable Colors:</strong> For each task, colors are
+                    randomly generated using RGB values but will always be light
+                    or pastel colored. This guarantees that the text inside each
+                    task will always be readable regardless of the randomly
+                    generated task color.
+                  </li>
+                  <li>
+                    <strong>Visual and Auditory Design:</strong> Rather than using a task
+                    dictionary, this prototype allows users to add their own
+                    task names and task times to the calendar, making it fully
+                    customizable to their morning routine.
+                  </li>
+                </ul>
+                <strong>Future Work</strong>
+                <ul>
+                  <li>
+                    <strong>Daily Shower Tracking:</strong> Making it so the user
+                    can decide on the total time interval. For example, they
+                    could select 5 hours and the clock auto adjusts to be from
+                    6am to 11am.
+                  </li>
+                  <li>
+                    <strong>Multiple Alarms:</strong> A good future change
+                    could be making it so the user inputs a total time frame and
+                    then when they click "Start", it auto-adjusts to the
+                    starting time and time frame. For example, a user can select
+                    5 hours and start the timer at 8am, and the clock adjusts to
+                    be from 8am to 1pm.
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+
+          <h3>Sketch evolution</h3>
+          <p class="small-note">
+            Replace <b>these images</b> with your own sketch evolution images.
+          </p>
+          <figure>
+            <!-- <img src="images/sk2-evolution-1.png" alt="Sketch #A - step 1" /> -->
+            <figcaption>
+              Step 1 — initial layout and annotated design decisions
+            </figcaption>
+          </figure>
+          <figure>
+            <!-- <img src="images/sk2-evolution-2.png" alt="Sketch #A - step 2" /> -->
+            <figcaption>Step 2 — second layout after peer feedback</figcaption>
+          </figure>
+          <figure>
+            <!-- <img src="images/sk2-evolution-3.png" alt="Sketch #A - step 3" /> -->
+            <figcaption>Step 3 — refined visuals and annotations</figcaption>
+          </figure>
+        </div>
+      </section>
 
       <!-- Examples -->
-      <button type="button" class="tab-btn" data-target="tab5" data-sketch="sk5" role="tab">Ex 1</button>
-      <button type="button" class="tab-btn" data-target="tab6" data-sketch="sk6" role="tab">Ex 2</button>
-      <button type="button" class="tab-btn" data-target="tab7" data-sketch="sk7" role="tab">Ex 3</button>
-      <button type="button" class="tab-btn" data-target="tab8" data-sketch="sk8" role="tab">Ex 4</button>
-      <button type="button" class="tab-btn" data-target="tab9" data-sketch="sk9" role="tab">Ex 5</button>
-      <button type="button" class="tab-btn" data-target="tab10" data-sketch="sk10" role="tab">Ex 6</button>
-      <button type="button" class="tab-btn" data-target="tab11" data-sketch="sk11" role="tab">Ex 7</button>
-      <button type="button" class="tab-btn" data-target="tab12" data-sketch="sk12" role="tab">Ex 8</button>
-      <button type="button" class="tab-btn" data-target="tab13" data-sketch="sk13" role="tab">Ex 9</button>
-      <button type="button" class="tab-btn" data-target="tab14" data-sketch="sk14" role="tab">Ex 10</button>
-    </nav>
+      <section id="tab5" class="tab-content" role="tabpanel">
+        <div id="sketch-container-sk5" class="sketch-container"></div>
+      </section>
 
-    <!-- Lab 1: Homepage -->
-    <section id="tab1" class="tab-content active" role="tabpanel">
-      <div id="sketch-container-sk1" class="sketch-container"></div>
-    </section>
+      <section id="tab6" class="tab-content" role="tabpanel">
+        <div id="sketch-container-sk6" class="sketch-container"></div>
+      </section>
 
-    <!-- Homework 4: Description -->
-    <section id="hwk4" class="tab-content" role="tabpanel">
-      <div id="sketch-container-hwk4" class="sketch-container">
-        <iframe style="width: 100%; height: 100vh;"
-          src="https://docs.google.com/document/d/e/2PACX-1vStWpfAr_ukylK6MoihGQ8B2IFGSJ1NsmhIY65TCaeVNoOeorFFPLv_bMz8De6r8qKsv-NMguUh5E8N/pub?embedded=true"></iframe>
-      </div>
-    </section>
+      <section id="tab7" class="tab-content" role="tabpanel">
+        <div id="sketch-container-sk7" class="sketch-container"></div>
+      </section>
 
-    <!-- Homework 4: Sketch 1 -->
-    <section id="tab2" class="tab-content" role="tabpanel">
-      <div id="sketch-container-sk2" class="sketch-container"></div>
-      <div id="sketch-drawing-sk2" class="sketch-evolution">
-        <!-- Project narrative template: replace the text below with your own narrative -->
-        <div class="sketch-narrative" aria-labelledby="sk2-narrative-title">
-          <h3 id="sk2-narrative-title">Sketch narrative (replace this and add to the other two sketches!)</h3>
-          <p class="small-note">Replace this entire block with your own text when submitting.</p>
-          <p>
-            Context: Briefly describe the situation or user need this sketch addresses. For example,
-            "This sketch visualizes sunrise/sunset behavior for a simple teaching demo on coordinate
-            systems and interaction." Keep it short — 1–2 sentences.
-          <ul>
-            <li><strong>Context:</strong> Who is this for? In what context will it be used? (e.g., mountain, pomodoro,
-              running, cooking, breathing?)</li>
-            <li><strong>Design decisions:</strong> Explain 2–3 key choices you made (layout, color, interaction) and why
-              you made them. Use plain language and reference any constraints (time, accessibility,
-              or target device).</li>
-            <li><strong>Future work:</strong> 1–2 ideas for improvements or extensions.</li>
-          </ul>
-          </p>
-        </div>
+      <section id="tab8" class="tab-content" role="tabpanel">
+        <div id="sketch-container-sk8" class="sketch-container"></div>
+      </section>
 
-        <h3>Sketch evolution</h3>
-        <p class="small-note">Replace <b>these images</b> with your own sketch evolution images.</p>
-        <figure>
-          <!-- <img src="images/sk2-evolution-1.png" alt="Sketch #A - step 1" /> -->
-          <figcaption>Step 1 — initial layout and annotated design decisions</figcaption>
-        </figure>
-        <figure>
-          <!-- <img src="images/sk2-evolution-2.png" alt="Sketch #A - step 2" /> -->
-          <figcaption>Step 2 — second layout after peer feedback</figcaption>
-        </figure>
-        <figure>
-          <!-- <img src="images/sk2-evolution-3.png" alt="Sketch #A - step 3" /> -->
-          <figcaption>Step 3 — refined visuals and annotations</figcaption>
-        </figure>
-      </div>
-    </section>
+      <section id="tab9" class="tab-content" role="tabpanel">
+        <div id="sketch-container-sk9" class="sketch-container"></div>
+      </section>
 
-    <!-- Homework 4: Sketch 1 -->
-    <section id="tab3" class="tab-content" role="tabpanel">
-      <div id="sketch-container-sk3" class="sketch-container"></div>
-    </section>
+      <section id="tab10" class="tab-content" role="tabpanel">
+        <div id="sketch-container-sk10" class="sketch-container"></div>
+      </section>
 
-    <!-- Homework 4: Sketch 1 -->
-    <section id="tab4" class="tab-content" role="tabpanel">
-      <div id="sketch-container-sk4" class="sketch-container"></div>
-    </section>
+      <section id="tab11" class="tab-content" role="tabpanel">
+        <div id="sketch-container-sk11" class="sketch-container"></div>
+        <p>Adapted from Golan Levin, 2016-2018</p>
+      </section>
 
+      <section id="tab12" class="tab-content" role="tabpanel">
+        <div id="sketch-container-sk12" class="sketch-container"></div>
+      </section>
 
+      <section id="tab13" class="tab-content" role="tabpanel">
+        <div id="sketch-container-sk13" class="sketch-container"></div>
+      </section>
 
-    <!-- Examples -->
-    <section id="tab5" class="tab-content" role="tabpanel">
-      <div id="sketch-container-sk5" class="sketch-container"></div>
-    </section>
+      <section id="tab14" class="tab-content" role="tabpanel">
+        <div id="sketch-container-sk14" class="sketch-container"></div>
+      </section>
+    </main>
 
-    <section id="tab6" class="tab-content" role="tabpanel">
-      <div id="sketch-container-sk6" class="sketch-container"></div>
-    </section>
-
-    <section id="tab7" class="tab-content" role="tabpanel">
-      <div id="sketch-container-sk7" class="sketch-container"></div>
-    </section>
-
-    <section id="tab8" class="tab-content" role="tabpanel">
-      <div id="sketch-container-sk8" class="sketch-container"></div>
-    </section>
-
-    <section id="tab9" class="tab-content" role="tabpanel">
-      <div id="sketch-container-sk9" class="sketch-container"></div>
-    </section>
-
-    <section id="tab10" class="tab-content" role="tabpanel">
-      <div id="sketch-container-sk10" class="sketch-container"></div>
-    </section>
-
-    <section id="tab11" class="tab-content" role="tabpanel">
-      <div id="sketch-container-sk11" class="sketch-container"></div>
-      <p>Adapted from Golan Levin, 2016-2018</p>
-    </section>
-
-    <section id="tab12" class="tab-content" role="tabpanel">
-      <div id="sketch-container-sk12" class="sketch-container"></div>
-    </section>
-
-    <section id="tab13" class="tab-content" role="tabpanel">
-      <div id="sketch-container-sk13" class="sketch-container"></div>
-    </section>
-
-    <section id="tab14" class="tab-content" role="tabpanel">
-      <div id="sketch-container-sk14" class="sketch-container"></div>
-    </section>
-
-  </main>
-
-  <script src="script.js"></script>
-</body>
-
+    <script src="script.js"></script>
+  </body>
 </html>

@@ -4,7 +4,7 @@ registerSketch("sk2", function (p) {
   let currentTaskIndex = 0;
   let tasks = [];
   let timerStarted = false;
-  let nameInput, timeInput, addBtn, startBtn, nextTaskBtn;
+  let nameInput, timeInput, addBtn, startBtn, nextTaskBtn, resetBtn;
   let currentTime, currentHeight;
 
   const px_per_min = 3;
@@ -35,6 +35,10 @@ registerSketch("sk2", function (p) {
     nextTaskBtn = p.createButton("Next Task");
     nextTaskBtn.size(100, 30);
     nextTaskBtn.position(10, 305);
+
+    resetBtn = p.createButton("Reset");
+    resetBtn.size(100, 30);
+    resetBtn.position(10, 355);
 
     // button interactions
     // task is added to tasks array
@@ -71,8 +75,15 @@ registerSketch("sk2", function (p) {
     // moves to next task and resets start time
     nextTaskBtn.mousePressed(() => {
       tasks[currentTaskIndex].actualHeight = currentHeight;
-      console.log(tasks);
       currentTaskIndex++;
+      startTime = p.millis();
+    });
+
+    // removes all tasks and resets start time
+    resetBtn.mousePressed(() => {
+      tasks = [];
+      currentTaskIndex = 0;
+      timerStarted = false;
       startTime = p.millis();
     });
   };
