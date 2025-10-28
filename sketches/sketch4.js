@@ -128,7 +128,9 @@ registerSketch("sk4", function (p) {
       p.fill(0);
     }
     p.textSize(90);
+    p.fill(70, 150, 220);
     p.text(mmssFormat(remainMs), 190, 330);
+    p.noFill();
 
     if (finished) {
       const gallonsPerMs = 2.5 / 60000;
