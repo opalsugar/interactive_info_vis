@@ -6,7 +6,7 @@ registerSketch("sk2", function (p) {
   let timerStarted = false;
   let nameInput, timeInput, addBtn, startBtn, nextTaskBtn, resetBtn;
   let currentTime, currentHeight;
-
+  let currentTask = "none";
   const px_per_min = 3;
 
   p.setup = function () {
@@ -68,20 +68,25 @@ registerSketch("sk2", function (p) {
 
     // starts timer and resets start time
     startBtn.mousePressed(() => {
+      currentTask = tasks[currentTaskIndex].task;
       startTime = p.millis();
       timerStarted = true;
+      p.redraw();
     });
 
     // moves to next task and resets start time
     nextTaskBtn.mousePressed(() => {
       tasks[currentTaskIndex].actualHeight = currentHeight;
       currentTaskIndex++;
+      currentTask = tasks[currentTaskIndex].task;
       startTime = p.millis();
+      p.redraw();
     });
 
     // removes all tasks and resets start time
     resetBtn.mousePressed(() => {
       tasks = [];
+      currentTask = "none";
       currentTaskIndex = 0;
       timerStarted = false;
       startTime = p.millis();
@@ -107,6 +112,7 @@ registerSketch("sk2", function (p) {
     p.text("7am", 130, 215);
     p.text("8am", 130, 395);
     p.text("9am", 130, 575);
+    p.text("Current Task: " + currentTask, 10, 370, 100);
 
     // resetting for rects
     p.noFill();
